@@ -11,6 +11,9 @@ const routes: Routes = [
       {path: '', component: MainComponent},
       {path: '', loadChildren: () => import('./views/user/user.module').then(m => m.UserModule)},
     ]
+  },
+  {
+    path: '**', redirectTo: ''
   }
 ];
 
