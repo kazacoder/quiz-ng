@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {TestService} from "../../../shared/services/test.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {QuizQuestionType, QuizType} from "../../../../types/quiz.type";
 import {ActionTestType} from "../../../../types/action-test.type";
 import {UserResultType} from "../../../../types/user-result.type";
+import {AuthService} from "../../../core/auth/auth.service";
 
 @Component({
   selector: 'app-test',
@@ -22,7 +23,9 @@ export class TestComponent implements OnInit {
   actionTestType = ActionTestType
 
   constructor(private activatedRoute: ActivatedRoute,
-              private testService: TestService,) {
+              private testService: TestService,
+              private authService: AuthService,
+              private router: Router,) {
   }
 
   ngOnInit(): void {
@@ -47,22 +50,27 @@ export class TestComponent implements OnInit {
   }
 
   startQuiz(): void {
-    // progress bar
-
-    // show question
-
-    // this.interval = window.setInterval(() => {
-    //   this.timerSeconds--;
-    //   if (this.timerSeconds === 0) {
-    //     clearInterval(this.interval);
-    //     this.complete();
-    //   }
-    // }, 1000);
-
+    this.interval = window.setInterval(() => {
+      this.timerSeconds--;
+      if (this.timerSeconds === 0) {
+        clearInterval(this.interval);
+        this.complete();
+      }
+    }, 1000);
   }
 
   complete(): void {
+    const userInfo = this.authService.getUserInfo()
+    if (userInfo) {
+      this.testService.passQuiz(this.quiz.id, userInfo.userId, this.userResult).subscribe(result => {
+        if (result) {
+          if ((result as DefaultResponseType).error !== undefined) {
 
+          }
+          this.router.navigate(['/result'], {queryParams: {id: this.quiz.id}}).then();
+        }
+      })
+    }
   }
 
   move(action: ActionTestType):void {
@@ -83,11 +91,17 @@ export class TestComponent implements OnInit {
     }
 
     if (action === ActionTestType.next || action === ActionTestType.pass) {
-      this.currentQuestionIndex++
+      if (this.currentQuestionIndex === this.quiz.questions.length) {
+        clearInterval(this.interval)
+        this.complete();
+        return;
+      }
+
+      this.currentQuestionIndex++;
     } else {
-      this.currentQuestionIndex--
+      this.currentQuestionIndex--;
     }
-    console.log(this.chosenAnswerId)
+
     const currentResult: UserResultType | undefined = this.userResult.find(item => {
       return item.questionId === this.activeQuestion.id;
     })
@@ -96,26 +110,6 @@ export class TestComponent implements OnInit {
       this.chosenAnswerId = currentResult.chosenAnswerId;
     } else {this.chosenAnswerId = null}
 
-    if (this.currentQuestionIndex > this.quiz.questions.length) {
-      clearInterval(this.interval)
-      this.complete();
-      return;
-    }
-
-    // if (this.progressBarElement) {
-    //   Array.from(this.progressBarElement.children).forEach((item: Element, index: number) => {
-    //     const currentItemIndex: number = index + 1
-    //     item.classList.remove('active');
-    //     item.classList.remove('complete');
-    //
-    //     if (currentItemIndex === this.currentQuestionIndex) {
-    //       item.classList.add('active');
-    //     } else if (currentItemIndex < this.currentQuestionIndex) {
-    //       item.classList.add('complete');
-    //     }
-    //   });
-    // }
 
   }
-
 }
