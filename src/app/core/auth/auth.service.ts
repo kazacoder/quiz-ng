@@ -6,6 +6,7 @@ import {LoginResponseType} from "../../../types/login-response.type";
 import {UserInfoType} from "../../../types/user-info.type";
 import {LogoutResponseType} from "../../../types/logout-response.type";
 import {SignupResponseType} from "../../../types/signup-response.type";
+import {RefreshResponseType} from "../../../types/refresh-response.type";
 
 @Injectable({
   providedIn: 'root'
@@ -51,11 +52,23 @@ export class AuthService {
     });
   }
 
+  refresh(): Observable<RefreshResponseType> {
+    const refreshToken : string | null = this.getTokens().refreshToken;
+    return this.http.post<RefreshResponseType>(environment.apiHost + 'refresh', {refreshToken})
+  }
+
   public setTokens(accessToken: string, refreshToken: string): void {
     localStorage.setItem(this.accessTokenKey, accessToken);
     localStorage.setItem(this.refreshTokenKey, refreshToken);
     this.isLogged = true;
     this.isLogged$.next(true);
+  }
+
+  public getTokens(): {accessToken: string | null, refreshToken: string | null} {
+    return {
+      accessToken: localStorage.getItem(this.accessTokenKey),
+      refreshToken: localStorage.getItem(this.refreshTokenKey),
+    }
   }
 
   public removeTokens(): void {
