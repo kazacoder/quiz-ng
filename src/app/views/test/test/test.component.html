@@ -1,1 +1,46 @@
-<p>test works!</p>
+<section class="test" *ngIf="quiz">
+  <div class="container">
+    <div class="test-pre-title small-title" id="pre-title">{{ quiz.name }}</div>
+    <div class="test-progress-bar" id="progress-bar">
+        <div class="test-progress-bar-item" *ngFor="let item of quiz.questions; let i = index"
+             [class.active]="currentQuestionIndex === (i + 1)"
+             [class.complete]="currentQuestionIndex > (i + 1)">
+          <div class="test-progress-bar-item-circle"></div>
+          <div class="test-progress-bar-item-text">Вопрос {{ i + 1 }}</div>
+        </div>
+    </div>
+    <div class="test-question">
+      <div class="test-question-title medium-title" id="title">
+        <span>Вопрос {{ currentQuestionIndex }}:</span> {{ activeQuestion.question }}
+      </div>
+      <div class="test-question-options" id="options">
+        <div class="test-question-option question-option" *ngFor="let answer of activeQuestion.answers">
+          <input type="radio" id="answer-{{ answer.id }}" name="answer"
+                 [value]="answer.id" [(ngModel)]="chosenAnswerId">
+          <label for="answer-{{ answer.id }}">{{ answer.answer }}</label>
+        </div>
+      </div>
+    </div>
+    <div class="test-actions">
+      <div class="test-previous-action">
+        <button class="button button-transparent" id="prev" (click)="move(actionTestType.prev)"
+                [disabled]="currentQuestionIndex === 1">
+          Назад
+        </button>
+      </div>
+      <div class="test-time">
+        <div class="test-time-text">Осталось времени:</div>
+        <div class="test-time-clock" id="timer">{{ timerSeconds }}</div>
+      </div>
+      <div class="test-next-action">
+        <button class="button button-transparent" id="next" (click)="move(actionTestType.next)"
+                [disabled]="!chosenAnswerId">
+          {{currentQuestionIndex === quiz.questions.length ? 'Завершить': 'Дальше'}}
+        </button>
+      </div>
+    </div>
+    <div [class]="{'pass-question': true, 'bottom-right-link': true, disabled: chosenAnswerId}">
+      <a (click)="move(actionTestType.pass)" id="pass">Пропустить вопрос <span></span></a>
+    </div>
+  </div>
+</section>

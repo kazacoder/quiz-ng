@@ -69,3 +69,52 @@ a {
   }
 }
 
+.small-title {
+  font-size: 20px;
+  line-height: 24px;
+  color: #DCDCF3;
+}
+
+.medium-title {
+  font-family: MuseoSansCyrlBold, sans-serif;
+  font-size: 36px;
+  line-height: 43px;
+  span {
+    color: #6933DC;
+  }
+}
+
+.question-option {
+  font-size: 20px;
+  line-height: 24px;
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.bottom-right-link {
+  display: flex;
+  justify-content: flex-end;
+  a {
+    font-size: 17px;
+    line-height: 20px;
+    color: #6933DC;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    &:hover {
+      text-decoration: underline;
+    }
+    img {
+      margin-left: 13px;
+    }
+    span {
+      margin-left: 13px;
+      background-image: url("../images/small-arrow.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      height: 15px;
+      width: 8px;
+    }
+  }
+}
