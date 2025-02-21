@@ -40,6 +40,9 @@
     .show-right-answers {
       align-self: flex-end;
       margin-top: 80px;
+      a {
+        cursor: pointer;
+      }
     }
   }
 }

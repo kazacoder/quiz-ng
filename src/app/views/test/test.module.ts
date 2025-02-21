@@ -6,13 +6,15 @@ import {ResultComponent} from './result/result.component';
 import {TestComponent} from './test/test.component';
 import {ChoiceComponent} from './choice/choice.component';
 import {FormsModule} from "@angular/forms";
+import { AnswersComponent } from './answers/answers.component';
 
 
 @NgModule({
   declarations: [
     ResultComponent,
     TestComponent,
-    ChoiceComponent
+    ChoiceComponent,
+    AnswersComponent
   ],
   imports: [
     CommonModule,

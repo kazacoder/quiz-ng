@@ -1,0 +1,34 @@
+<section class="answers">
+  <div class="container" *ngIf="quiz">
+    <div class="answers-pre-title small-title" id="pre-title">
+      <div class="answers-pre-title-result">Результат прохождения теста</div>
+      <div class="answers-pre-title-arrow">
+        <img src="assets/images/small-arrow-gray.png" alt="Стрелка">
+      </div>
+      <div class="answers-pre-title-test" id="test-title">
+        {{ quiz.test.name }}
+      </div>
+    </div>
+    <div class="answers-title big-title"><span>Правильные ответы</span> к тесту</div>
+    <div class="answers-person">Тест выполнил <span id="answers-person">{{ userInfoString }}</span></div>
+    <div class="answers-questions" id="answers-questions">
+      <div class="answer-question" *ngFor="let question of quiz.test.questions">
+        <div class="answer-question-title medium-title">
+          <span>Вопрос {{ question.id }}:</span> {{ question.question }}
+        </div>
+        <ul class="answers-question-options">
+          <li class="answers-question-option question-option"
+              [class.success]="answer.correct"
+              [class.wrong]="answer.correct === false"
+              *ngFor="let answer of question.answers">
+            {{ answer.answer }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="return-to-result bottom-right-link">
+      <a (click)="backToResult()" id="back">Обратно к моему результату теста<img
+        src="assets/images/small-arrow.png" alt="Стрелка"></a>
+    </div>
+  </div>
+</section>
