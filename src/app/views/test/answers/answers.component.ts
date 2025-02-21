@@ -37,7 +37,6 @@ export class AnswersComponent implements OnInit {
             }
             this.quiz = (result as QuizResultType);
           }
-          console.log(this.quiz)
         })
     }
   }
@@ -49,5 +48,4 @@ export class AnswersComponent implements OnInit {
       this.router.navigate(['/']).then();
     }
   }
-
 }
